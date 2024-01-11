@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Todo } from './entities/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
@@ -11,10 +15,18 @@ export class TodoService {
     private todoRepository: typeof Todo,
   ) {}
 
-  create(createTodoDto: CreateTodoDto) {
-    return this.todoRepository.create(
-      createTodoDto as Omit<CreateTodoDto, 'id'>,
-    );
+  async create(createTodoDto: CreateTodoDto) {
+    try {
+      const newTodo = await this.todoRepository.create(
+        createTodoDto as Omit<CreateTodoDto, 'id'>,
+      );
+      await newTodo.reload();
+      return newTodo;
+    } catch (error) {
+      throw new ConflictException(
+        `Todo with task ${createTodoDto.task} already exists`,
+      );
+    }
   }
 
   async findAll(): Promise<Todo[]> {

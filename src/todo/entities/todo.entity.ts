@@ -1,4 +1,13 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  AutoIncrement,
+  Unique,
+  Default,
+  AllowNull,
+} from 'sequelize-typescript';
 
 @Table({
   tableName: 'todos',
@@ -7,12 +16,17 @@ import { Column, Model, Table } from 'sequelize-typescript';
   timestamps: true,
 })
 export class Todo extends Model {
-  @Column({ primaryKey: true })
+  @PrimaryKey
+  @AutoIncrement
+  @Column
   id: number;
 
+  @Unique
+  @AllowNull(false)
   @Column
   task: string;
 
-  @Column({ defaultValue: false })
+  @Default(false)
+  @Column
   completed: boolean;
 }
