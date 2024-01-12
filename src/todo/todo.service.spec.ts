@@ -44,10 +44,7 @@ describe('TodoService', () => {
 
   describe('create', () => {
     it('should create a todo', async () => {
-      const result = await service.create({
-        task: testTodo.task,
-        completed: testTodo.completed,
-      });
+      const result = await service.create(testTodo);
       expect(result).toEqual(testTodo);
     });
   });

@@ -1,9 +1,11 @@
 import {
   Injectable,
   NotFoundException,
-  ConflictException,
+  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { ValidationError } from 'sequelize';
 import { Todo } from './entities/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -20,12 +22,19 @@ export class TodoService {
       const newTodo = await this.todoRepository.create(
         createTodoDto as Omit<CreateTodoDto, 'id'>,
       );
-      await newTodo.reload();
       return newTodo;
     } catch (error) {
-      throw new ConflictException(
-        `Todo with task ${createTodoDto.task} already exists`,
-      );
+      if (error instanceof ValidationError) {
+        const todoMessage = error.message;
+        const todoError = error.errors.find((err) => err.path === 'task');
+        const humanizedMessage = todoMessage?.replace(
+          '{{value}}',
+          todoError?.value || '',
+        );
+        throw new BadRequestException(humanizedMessage || 'Bad request');
+      }
+      console.log(error);
+      throw new InternalServerErrorException('Something went wrong');
     }
   }
 

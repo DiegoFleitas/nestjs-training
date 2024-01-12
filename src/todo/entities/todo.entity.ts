@@ -21,7 +21,10 @@ export class Todo extends Model {
   @Column
   id: number;
 
-  @Unique
+  @Unique({
+    name: 'task',
+    msg: 'A todo with task "{{value}}" already exists',
+  })
   @AllowNull(false)
   @Column
   task: string;
