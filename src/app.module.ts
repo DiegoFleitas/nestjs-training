@@ -20,6 +20,10 @@ import { TodoModule } from './todo/todo.module';
       database: process.env.DB_NAME,
       autoLoadModels: true,
       synchronize: false,
+      logging() {
+        // eslint-disable-next-line prefer-rest-params
+        console.log('[MYSQL]', arguments?.[0], arguments?.[1]?.bind);
+      },
     }),
     TodoModule,
   ],
