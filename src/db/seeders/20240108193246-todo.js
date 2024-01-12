@@ -8,18 +8,21 @@ const todos = [
     task: 'Learn NestJS',
     completed: false,
     created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 2,
     task: 'Learn Sequelize',
     completed: false,
     created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 3,
     task: 'Success!',
     completed: false,
     created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
