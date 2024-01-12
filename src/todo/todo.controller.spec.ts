@@ -25,13 +25,11 @@ describe('TodoController', () => {
           provide: TodoService,
           // using a factory just because
           useFactory: () => ({
-            create: jest.fn(() => testTodo),
-            findAll: jest.fn(() => [testTodo]),
-            findOne: jest.fn(() => testTodo),
-            update: jest
-              .fn(() => testTodoUpdated)
-              .mockReturnValue(testTodoUpdated),
-            remove: jest.fn(() => true),
+            create: jest.fn().mockResolvedValue(testTodo),
+            findAll: jest.fn().mockResolvedValue([testTodo]),
+            findOne: jest.fn().mockResolvedValue(testTodo),
+            update: jest.fn().mockResolvedValue(testTodoUpdated),
+            remove: jest.fn().mockResolvedValue(true),
           }),
         },
       ],

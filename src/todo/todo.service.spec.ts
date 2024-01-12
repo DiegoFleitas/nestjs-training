@@ -25,11 +25,11 @@ describe('TodoService', () => {
         {
           provide: getModelToken(Todo),
           useValue: {
-            create: jest.fn(() => testTodo),
-            findAll: jest.fn(() => [testTodo]),
-            findOne: jest.fn(() => testTodo),
-            update: jest.fn(() => testTodoUpdated),
-            destroy: jest.fn(() => null),
+            create: jest.fn().mockResolvedValue(testTodo),
+            findAll: jest.fn().mockResolvedValue([testTodo]),
+            findOne: jest.fn().mockResolvedValue(testTodo),
+            update: jest.fn().mockResolvedValue(testTodoUpdated),
+            destroy: jest.fn().mockResolvedValue(null),
           },
         },
       ],
