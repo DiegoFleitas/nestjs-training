@@ -1,7 +1,6 @@
 import {
   Injectable,
   NotFoundException,
-  BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
@@ -25,15 +24,10 @@ export class TodoService {
       return newTodo;
     } catch (error) {
       if (error instanceof ValidationError) {
-        const todoMessage = error.message;
-        const todoError = error.errors.find((err) => err.path === 'task');
-        const humanizedMessage = todoMessage?.replace(
-          '{{value}}',
-          todoError?.value || '',
-        );
-        throw new BadRequestException(humanizedMessage || 'Bad request');
+        // delegate these errors to the controller
+        throw error;
       }
-      console.log(error);
+      console.error(error);
       throw new InternalServerErrorException('Something went wrong');
     }
   }

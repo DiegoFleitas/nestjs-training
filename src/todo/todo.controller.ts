@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
+import { ValidationError } from 'sequelize';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -17,7 +19,17 @@ export class TodoController {
 
   @Post()
   create(@Body() createTodoDto: CreateTodoDto) {
-    return this.todoService.create(createTodoDto);
+    return this.todoService.create(createTodoDto).catch((error) => {
+      if (error instanceof ValidationError) {
+        const todoMessage = error.message;
+        const todoError = error.errors.find((err) => err.path === 'task');
+        const humanizedMessage = todoMessage?.replace(
+          '{{value}}',
+          todoError?.value || '',
+        );
+        throw new BadRequestException(humanizedMessage || 'Bad request');
+      }
+    });
   }
 
   @Get()
