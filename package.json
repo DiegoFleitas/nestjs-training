@@ -77,6 +77,14 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/test/mocks",
+      "<rootDir>/src/db/*"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test/mocks",
+      "<rootDir>/src/db/*"
+    ]
   }
 }
