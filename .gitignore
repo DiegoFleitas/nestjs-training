@@ -4,3 +4,4 @@ coverage/
 dist/
 src/config/*
 !src/config/.env.example
+db_data

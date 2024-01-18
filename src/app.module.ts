@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
 
+// console.log(process.env);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -12,12 +14,12 @@ import { TodoModule } from './todo/todo.module';
       envFilePath: `./src/config/.env.${process.env.NODE_ENV}`,
     }),
     SequelizeModule.forRoot({
+      username: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+      host: process.env.MYSQL_HOST,
+      port: parseInt(process.env.MYSQL_PORT),
       dialect: 'mysql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
       autoLoadModels: true,
       synchronize: false,
       logging() {
