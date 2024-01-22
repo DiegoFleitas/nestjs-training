@@ -8,16 +8,33 @@ import {
   Delete,
   BadRequestException,
 } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  // ApiInternalServerErrorResponse,
+  // ApiNoContentResponse,
+  // ApiNotFoundResponse,
+  // ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ValidationError } from 'sequelize';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 
+@ApiTags('Todo')
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Add todos to the app database',
+  })
+  @ApiBadRequestResponse({
+    description: 'A todo with task "{{value}}" already exists',
+  })
   create(@Body() createTodoDto: CreateTodoDto) {
     return this.todoService.create(createTodoDto).catch((error) => {
       if (error instanceof ValidationError) {
